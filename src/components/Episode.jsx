@@ -8,7 +8,7 @@ const Episode = () => {
     useEffect(() => {
         (async() => {
            
-            console.log(parsed)
+            console.log(episodeId, podcastId)
         })()
     }, [])
 

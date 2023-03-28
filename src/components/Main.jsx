@@ -11,7 +11,7 @@ console.log(podcasts[0])
         (async () => {
             const podcasts = await podcastsCache.getItem('podcasts')
             if (podcasts?.length) {
-                setPodcasts(podcasts);
+                setPodcasts(podcasts); //
                 return
             }
             try {
@@ -31,11 +31,9 @@ console.log(podcasts[0])
 
     return(
         <div>
-            <h1>Main</h1>
-            <nav>
-        <Link to="podcast/123">Podcast 123</Link>
-        <Link to="podcast/123/episode/456">podcast 123 - episode 456</Link>
-      </nav>
+            
+
+<Link to={`podcast/158/episodes/1234`}>epi</Link>
 
       <section>
         {podcasts.length && podcasts.map(item => {
