@@ -21,7 +21,7 @@ module.exports = {
     static: {
       directory: path.join(__dirname, "build"),
     },
-    port: 3014,
+    port: 3000,
   },
   module: {
     // exclude node_modules
