@@ -25,9 +25,9 @@ const Main = props => {
                 console.log(data?.feed?.entry[0])
                 const items = data?.feed?.entry?.map(item => ({
                     id: item.id?.attributes && item.id?.attributes['im:id'],
-                    title: item.title.label,
+                    title: item['im:name']?.label,
                     author: item['im:artist']?.label,
-                    image: item['im:image'][1].label,
+                    image: item['im:image'][2].label,
                     description: item.summary?.label
                 }))
                 setPodcasts(items)

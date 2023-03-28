@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { useOutletContext, useParams } from "react-router-dom"
+import { useParams } from "react-router-dom"
 import { URL_PODCAST_DETAILS } from "../utils/constants";
 import { podcastsCache } from "../utils/cacheRef";
 import './Podcast.css'
@@ -11,14 +11,16 @@ const Podcast = () => {
     const [ info, setInfo ] = useState();
     const [ epiInfo, setEpiInfo ] = useState();
 
-   
+    const [activeItem, setActiveItem] = useContext(ActiveItemContext);
 
 
     useEffect(() => {
         (async () => {
             const data = await podcastsCache.getItem('details');
-            if (data && data[podcastId]) {
-                setInfo(JSON.parse(data)[podcastId])
+           const epiData = await podcastsCache.getItem('episodes');
+            if (data && data[podcastId] ) { // && epiData && epiData[podcastId]
+                setInfo(data[podcastId])
+                //setEpiInfo(epiData[podcastId])
                 return
             }
             try {
@@ -35,27 +37,25 @@ const Podcast = () => {
                     trackTimeMillis: parsed?.results[0]?.trackTimeMillis
                 }
                 setInfo(info)
+                await podcastsCache.setItem('details', JSON.stringify({ [podcastId] : info}))
                 const epiString = `${URL_PODCAST_DETAILS}?id=${podcastId}&country=US&media=podcast&entity=podcastEpisode`
                 const epiUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(epiString)}`
                 const epiRes = await fetch(epiUrl);
                 const epiData = await epiRes.json();
                 const parsedEpiData = JSON.parse(epiData.contents.replace(/\\n/g));
-                console.log('--epiData', JSON.parse(epiData.contents.replace(/\\n/g)))
                 const episodesInfo = {
                     count: parsedEpiData?.resultCount,
                     episodes: parsedEpiData?.results?.filter(item => item.wrapperType === 'podcastEpisode')
                         .map(({ releaseDate, trackId, trackTimeMillis, trackName}) => ({
                             id: trackId,
-                            date: releaseDate,
+                            date: releaseDate.slice(0,10).split('-').reverse().join('/'),
                             duration: trackTimeMillis,
                             title: trackName
 
                         }))
                 }
-                console.log('episodesInfo', episodesInfo)
                 setEpiInfo(episodesInfo)
-                await podcastsCache.setItem('details', JSON.stringify({ [podcastId] : JSON.parse(parsed)?.results[0]}))
-
+                await podcastsCache.setItem('episodes', JSON.stringify({ [podcastId] : episodesInfo}))
             } catch (error) {
                 console.error(error)
             }
@@ -66,9 +66,21 @@ const Podcast = () => {
     return podcastId ? <div className="wrapper">
         {/* <h2>{ podcastId}</h2> */}
         <section className="podcast-info">
-            {/* {
-                info && <PodcastCard id={id} title={title} image={image} author={author} description={description} />
-            } */}
+            {
+                info && 
+                    <section  className="podcast-info__summary">
+                        <img src={activeItem.image} alt={activeItem.title} />
+                        <div>
+                            <h3>{activeItem.title}</h3>
+                            <div>by <span>{activeItem.author}</span></div>
+                        </div>
+                        <div>
+                            <p>Description:</p>
+                            <p>{activeItem.description}</p>
+                        </div>
+                        
+                    </section>
+            }
 
         </section>
             {
@@ -80,7 +92,11 @@ const Podcast = () => {
                     </section>
                     <section className="podcast-episodes">
                         { epiInfo.episodes?.map(item => {
-                            return <div key={item.id}>{item.title}</div>
+                            return <div  key={item.id} className="table-item">
+                                <div className="table-item__title">{item.title}</div>
+                                <div className="table-item__date">{item.date}</div>
+                                <div className="table-item__duration">{item.duration}</div>
+                            </div>
                         })}
 
                     </section>

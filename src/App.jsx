@@ -9,7 +9,7 @@ import { ActiveItemContext } from './context/ActiveItemContext';
 const App = () => {
 
     const [ activeItem, setActiveItem ] = useState({});
-    console.log('val', activeItem)
+    
     return (
             <ActiveItemContext.Provider value={[ activeItem, setActiveItem ]}>
             <div className='app'>
