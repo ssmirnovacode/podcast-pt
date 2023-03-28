@@ -3,7 +3,7 @@
 }
 
 .header a {
-    color: rgb(69, 120, 167);
+    color: var(--accent-color);
     text-decoration: none;
     font-weight: bold;
 }

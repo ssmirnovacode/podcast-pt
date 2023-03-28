@@ -1,13 +1,18 @@
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom"
+import { useContext, useEffect, useState } from "react";
+import { useOutletContext, useParams } from "react-router-dom"
 import { URL_PODCAST_DETAILS } from "../utils/constants";
 import { podcastsCache } from "../utils/cacheRef";
+import './Podcast.css'
+import { ActiveItemContext } from "../context/ActiveItemContext";
 
 const Podcast = () => {
     const { podcastId } = useParams();
 
     const [ info, setInfo ] = useState();
     const [ epiInfo, setEpiInfo ] = useState();
+
+   
+
 
     useEffect(() => {
         (async () => {
@@ -22,13 +27,13 @@ const Podcast = () => {
                 const result = await fetch(fetchUrl);
                 const data = await result.json();
                 const parsed = JSON.parse(data.contents.replace(/\\n/g));
-                
+
                 const info = {
-                    artistName: parsed?.results[0]?.artistName, 
-                    trackName: parsed?.results[0]?.trackName, 
-                    releaseDate: parsed?.results[0]?.releaseDate, 
+                    artistName: parsed?.results[0]?.artistName,
+                    trackName: parsed?.results[0]?.trackName,
+                    releaseDate: parsed?.results[0]?.releaseDate,
                     trackTimeMillis: parsed?.results[0]?.trackTimeMillis
-                } 
+                }
                 setInfo(info)
                 const epiString = `${URL_PODCAST_DETAILS}?id=${podcastId}&country=US&media=podcast&entity=podcastEpisode`
                 const epiUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(epiString)}`
@@ -54,18 +59,34 @@ const Podcast = () => {
             } catch (error) {
                 console.error(error)
             }
-           
+
          })()
     }, [])
 
-    return podcastId ? <div>
-        <h2>{ podcastId}</h2>
-        <section>
-            {
-                info &&<h3>{info?.artistName}</h3>
-            }
-            
+    return podcastId ? <div className="wrapper">
+        {/* <h2>{ podcastId}</h2> */}
+        <section className="podcast-info">
+            {/* {
+                info && <PodcastCard id={id} title={title} image={image} author={author} description={description} />
+            } */}
+
         </section>
+            {
+                epiInfo &&
+                <div className="podcast-details">
+                    <section className="podcast-count">
+                        <div>Episodes: <span>{epiInfo?.count}</span></div>
+
+                    </section>
+                    <section className="podcast-episodes">
+                        { epiInfo.episodes?.map(item => {
+                            return <div key={item.id}>{item.title}</div>
+                        })}
+
+                    </section>
+                </div>
+            }
+
     </div> : <span>Loading</span>
 }
 
