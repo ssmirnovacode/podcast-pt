@@ -4,6 +4,7 @@ import { URL_PODCAST_DETAILS } from "../utils/constants";
 import { podcastsCache } from "../utils/cacheRef";
 import './Podcast.css'
 import { ActiveItemContext } from "../context/ActiveItemContext";
+import PodcastSummary from "./PodcastSummary";
 
 const Podcast = () => {
     const { podcastId } = useParams();
@@ -71,19 +72,8 @@ const Podcast = () => {
         {/* <h2>{ podcastId}</h2> */}
         <section className="podcast-info">
             {
-                info && 
-                    <section  className="podcast-info__summary">
-                        <img src={activeItem.image} alt={activeItem.title} />
-                        <div>
-                            <h3>{activeItem.title}</h3>
-                            <div>by <span>{activeItem.author}</span></div>
-                        </div>
-                        <div>
-                            <p>Description:</p>
-                            <p>{activeItem.description}</p>
-                        </div>
-                        
-                    </section>
+                info && <PodcastSummary activeItem={activeItem} />
+                    
             }
 
         </section>

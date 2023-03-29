@@ -25,6 +25,7 @@ const App = () => {
                 <Routes>
                     <Route path={'/'} index element={<Main bla='bla' />}/>  
                     <Route path={'/podcast/:podcastId'} element={<Podcast/>}>
+                        {/* <Route index element={<Episode/>}/> */}
                         <Route path={'episode/:episodeId'} element={<Episode/>}/>
                     </Route>
                 </Routes> 
