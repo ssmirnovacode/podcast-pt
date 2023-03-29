@@ -19,7 +19,7 @@ const Main = props => {
             try {
                 const res = await fetch(URL_TOP_100);
                 const data = await res.json();
-                console.log(data?.feed?.entry[0])
+                //console.log(data?.feed?.entry[0])
                 const items = data?.feed?.entry?.map(item => ({
                     id: item.id?.attributes && item.id?.attributes['im:id'],
                     title: item['im:name']?.label,
