@@ -66,6 +66,7 @@
     grid-template-columns: 4fr 1fr 1fr;
     gap: 1rem;
     font-size: .8rem;
+    margin-bottom: 1rem;
    
 }
 

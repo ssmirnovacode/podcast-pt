@@ -1,6 +1,4 @@
 import { useContext, useEffect, useState } from "react";
-import { Link, useOutletContext } from "react-router-dom";
-import { ActiveItemContext } from "../context/ActiveItemContext";
 import { podcastsCache } from "../utils/cacheRef";
 import { URL_TOP_100 } from "../utils/constants";
 import './Main.css'
@@ -10,7 +8,6 @@ const Main = props => {
 
     const [ podcasts, setPodcasts ] = useState([]);
     const [ term, setTerm ] = useState('')
-    const [ activeItem, setActiveItem ] = useContext(ActiveItemContext)
 
     useEffect(() => {
         (async () => {
@@ -38,11 +35,6 @@ const Main = props => {
         })()
     }, [])
 
-
-    const handleCardClick = item => {
-        console.log('item', item)
-        
-    }
    const itemsToRender = podcasts.filter(({ author, title }) => author.toUpperCase().includes(term.toUpperCase()) || title.toUpperCase().includes(term.toUpperCase()))
  
     return(

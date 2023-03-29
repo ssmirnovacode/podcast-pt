@@ -3,12 +3,20 @@ import Episode from './components/Episode';
 import Main from "./components/Main";
 import Podcast from './components/Podcast';
 import './App.css'
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ActiveItemContext } from './context/ActiveItemContext';
+import { podcastsCache } from './utils/cacheRef';
 
 const App = () => {
 
     const [ activeItem, setActiveItem ] = useState({});
+
+    useEffect(() => {
+        (async () => {
+            const activeItem = await podcastsCache.getItem('activeItem');
+            activeItem && setActiveItem(JSON.parse(activeItem))
+        })()
+    }, [])
     
     return (
             <ActiveItemContext.Provider value={[ activeItem, setActiveItem ]}>

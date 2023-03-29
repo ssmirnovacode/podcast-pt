@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { useParams } from "react-router-dom"
+import { Link, useParams } from "react-router-dom"
 import { URL_PODCAST_DETAILS } from "../utils/constants";
 import { podcastsCache } from "../utils/cacheRef";
 import './Podcast.css'
@@ -18,10 +18,14 @@ const Podcast = () => {
         (async () => {
             const data = await podcastsCache.getItem('details');
            const epiData = await podcastsCache.getItem('episodes');
-            if (data && data[podcastId] ) { // && epiData && epiData[podcastId]
+            if (data && data[podcastId] ) { // 
                 setInfo(data[podcastId])
-                //setEpiInfo(epiData[podcastId])
+                if (epiData && epiData[podcastId]) {
+                    setEpiInfo(epiData[podcastId])
+                    return
+                }
                 return
+                
             }
             try {
                 const stringToEncode = `${URL_PODCAST_DETAILS}?id=${podcastId}`
@@ -93,7 +97,7 @@ const Podcast = () => {
                     <section className="podcast-episodes">
                         { epiInfo.episodes?.map(item => {
                             return <div  key={item.id} className="table-item">
-                                <div className="table-item__title">{item.title}</div>
+                                <div className="table-item__title"><Link to={`podcast/${podcastId}/episode/${item.id}`}>{item.title}</Link></div>
                                 <div className="table-item__date">{item.date}</div>
                                 <div className="table-item__duration">{item.duration}</div>
                             </div>
