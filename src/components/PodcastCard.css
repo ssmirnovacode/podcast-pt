@@ -22,6 +22,7 @@
 .podcast-list__item.image img {
     width: 80px;
     border-radius: 100%;
+    border: 1px solid var(--border-color)
 }
 
 .podcast-list__item h2 {

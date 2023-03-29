@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { podcastsCache } from "../utils/cacheRef";
 import { URL_TOP_100 } from "../utils/constants";
 import './Main.css'
-import PodcastCard from "./PodcastCard";
+import PodcastCard from "./PodcastCard.jsx";
 
 const Main = props => {
 

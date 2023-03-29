@@ -4,7 +4,7 @@ import { URL_PODCAST_DETAILS } from "../utils/constants";
 import { podcastsCache } from "../utils/cacheRef";
 import './Podcast.css'
 import { ActiveItemContext } from "../context/ActiveItemContext";
-import PodcastSummary from "./PodcastSummary";
+import PodcastSummary from "./PodcastSummary.jsx";
 import { LoadingContext } from "../context/LoadingContext";
 
 const Podcast = () => {

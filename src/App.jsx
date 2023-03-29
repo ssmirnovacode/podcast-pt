@@ -1,15 +1,15 @@
 import {Link, Outlet, Route, Routes } from 'react-router-dom';
-import Episode from './components/Episode';
-import Main from "./components/Main";
-import Podcast from './components/Podcast';
+import Episode from './components/Episode.jsx';
+import Main from "./components/Main.jsx";
+import Podcast from './components/Podcast.jsx';
 import './App.css'
 import React, { useEffect, useState } from 'react';
 import { ActiveItemContext } from './context/ActiveItemContext';
 import { podcastsCache } from './utils/cacheRef';
-import PodcastSummary from './components/PodcastSummary';
-import PodcastDetails from './components/PodcastDetails';
+import PodcastSummary from './components/PodcastSummary.jsx';
+import PodcastDetails from './components/PodcastDetails.jsx';
 import { LoadingContext } from './context/LoadingContext';
-import Spinner from './components/Spinner';
+import Spinner from './components/Spinner.jsx';
 
 const App = () => {
 
