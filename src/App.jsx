@@ -6,6 +6,8 @@ import './App.css'
 import React, { useEffect, useState } from 'react';
 import { ActiveItemContext } from './context/ActiveItemContext';
 import { podcastsCache } from './utils/cacheRef';
+import PodcastSummary from './components/PodcastSummary';
+import PodcastDetails from './components/PodcastDetails';
 
 const App = () => {
 
@@ -25,7 +27,8 @@ const App = () => {
                 <Routes>
                     <Route path={'/'} index element={<Main bla='bla' />}/>  
                     <Route path={'/podcast/:podcastId'} element={<Podcast/>}>
-                        {/* <Route index element={<Episode/>}/> */}
+                        {/* <Route index element={<Podcast/>} /> */}
+                        <Route path={':podcastId'} element={<PodcastDetails />}/>
                         <Route path={'episode/:episodeId'} element={<Episode/>}/>
                     </Route>
                 </Routes> 

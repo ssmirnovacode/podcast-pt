@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom"
+import { Link, Outlet, useParams } from "react-router-dom"
 import { URL_PODCAST_DETAILS } from "../utils/constants";
 import { podcastsCache } from "../utils/cacheRef";
 import './Podcast.css'
@@ -78,23 +78,23 @@ const Podcast = () => {
 
         </section>
             {
-                epiInfo &&
-                <div className="podcast-details">
-                    <section className="podcast-count">
-                        <div>Episodes: <span>{epiInfo?.count}</span></div>
+                epiInfo && <Outlet context={{ details: epiInfo }} />
+                // <div className="podcast-details">
+                //     <section className="podcast-count">
+                //         <div>Episodes: <span>{epiInfo?.count}</span></div>
 
-                    </section>
-                    <section className="podcast-episodes">
-                        { epiInfo.episodes?.map(item => {
-                            return <div  key={item.id} className="table-item">
-                                <div className="table-item__title"><Link to={`podcast/${podcastId}/episode/${item.id}`}>{item.title}</Link></div>
-                                <div className="table-item__date">{item.date}</div>
-                                <div className="table-item__duration">{item.duration}</div>
-                            </div>
-                        })}
+                //     </section>
+                //     <section className="podcast-episodes">
+                //         { epiInfo.episodes?.map(item => {
+                //             return <div  key={item.id} className="table-item">
+                //                 <div className="table-item__title"><Link to={`podcast/${podcastId}/episode/${item.id}`}>{item.title}</Link></div>
+                //                 <div className="table-item__date">{item.date}</div>
+                //                 <div className="table-item__duration">{item.duration}</div>
+                //             </div>
+                //         })}
 
-                    </section>
-                </div>
+                //     </section>
+                // </div>
             }
 
     </div> : <span>Loading</span>
