@@ -57,12 +57,13 @@ const Podcast = () => {
                 const episodesInfo = {
                     count: parsedEpiData?.resultCount,
                     episodes: parsedEpiData?.results?.filter(item => item.wrapperType === 'podcastEpisode')
-                        .map(({ releaseDate, trackId, trackTimeMillis, trackName, description=''}) => ({
+                        .map(({ releaseDate, trackId, trackTimeMillis, trackName, description='', episodeUrl}) => ({
                             id: trackId,
                             date: releaseDate.slice(0,10).split('-').reverse().join('/'),
                             duration: trackTimeMillis,
                             title: trackName,
-                            description
+                            description,
+                            audio: episodeUrl 
 
                         }))
                 }

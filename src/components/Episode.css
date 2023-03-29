@@ -1,0 +1,16 @@
+.episode-wrapper {
+    border: 1px solid var(--border-color);
+    box-shadow: var(--box-shadow);
+    padding: .5rem 1rem;
+    height: min-content;
+    font-style: italic;
+}
+
+.episode-wrapper h3 {
+    font-size: .8rem;
+    font-weight: bold;
+}
+
+.episode-wrapper p {
+    font-size: .7rem;
+}

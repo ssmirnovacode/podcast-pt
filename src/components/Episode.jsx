@@ -1,26 +1,21 @@
 import { useEffect } from "react";
 import { useOutletContext, useParams } from "react-router-dom";
-
+import './Episode.css';
 
 const Episode = () => {
     const { episodeId, podcastId } = useParams();
     const { details } = useOutletContext();
 
-    useEffect(() => {
-        console.log(episodeId, podcastId)
-        console.log('epi', details?.episodes?.find(item => item.id == episodeId))
-    }, [])
-
     const episode = details?.episodes?.find(item => item.id == episodeId);
 
     return(
-        <div>
-            <h2>{episodeId}</h2>
+        <div className="episode-wrapper">
             {
                 episode && 
                 <>
                 <h3>{episode.title}</h3>
                 <p>{episode.description}</p>
+                <audio controls src={episode.audio} />
                 </>
             }
         </div>
