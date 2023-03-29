@@ -26,8 +26,8 @@ const App = () => {
                 <h1 className='header'><Link to="/">Podcaster</Link></h1>
                 <Routes>
                     <Route path={'/'} index element={<Main bla='bla' />}/>  
-                    <Route path={'/podcast/:podcastId'} element={<Podcast/>}>
-                        {/* <Route index element={<Podcast/>} /> */}
+                    <Route path={'/podcast/'} element={<Podcast />}>
+                        <Route index element={<PodcastSummary item={activeItem}/>} />
                         <Route path={':podcastId'} element={<PodcastDetails />}/>
                         <Route path={'episode/:episodeId'} element={<Episode/>}/>
                     </Route>

@@ -1,10 +1,10 @@
 
-import { useOutletContext } from 'react-router-dom';
+import { Link, useOutletContext, useParams } from 'react-router-dom';
 import './PodcastDetails.css';
 
 const PodcastDetails = () => {
-
-   const { details } = useOutletContext();
+    const { podcastId } = useParams();
+    const { details } = useOutletContext();
 
     return(
         <div className="podcast-details">
