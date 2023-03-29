@@ -5,6 +5,7 @@ import { podcastsCache } from "../utils/cacheRef";
 import './Podcast.css'
 import { ActiveItemContext } from "../context/ActiveItemContext";
 import PodcastSummary from "./PodcastSummary";
+import { LoadingContext } from "../context/LoadingContext";
 
 const Podcast = () => {
 
@@ -12,13 +13,13 @@ const Podcast = () => {
     const [ epiInfo, setEpiInfo ] = useState();
 
     const [activeItem, setActiveItem] = useContext(ActiveItemContext);
-
+    const [ loading, setLoading ] = useContext(LoadingContext)
 
     useEffect(() => {
         (async () => {
             console.log('useEff')
             if (!activeItem) return;
-            
+            setLoading(true)
             const data = await podcastsCache.getItem('details');
             const epiData = await podcastsCache.getItem('episodes');
             if (data && data[activeItem?.id] ) { // 
@@ -26,13 +27,14 @@ const Podcast = () => {
                 if (epiData && epiData[activeItem?.id]) {
                     setEpiInfo(epiData[activeItem?.id])
                     //console.log('epi', epiData[activeItem?.id].episodes[0])
+                    setLoading(false)
                     return
                 }
                 return
                 
             }
             try {
-                
+                setLoading(true)
                 const stringToEncode = `${URL_PODCAST_DETAILS}?id=${activeItem?.id}`
                 const fetchUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(stringToEncode)}`
                 const result = await fetch(fetchUrl);
@@ -46,7 +48,7 @@ const Podcast = () => {
                     releaseDate: parsed?.results[0]?.releaseDate,
                     trackTimeMillis: parsed?.results[0]?.trackTimeMillis
                 }
-                setInfo(info)
+                
                 await podcastsCache.setItem('details', JSON.stringify({ [activeItem?.id] : info}))
                 const epiString = `${URL_PODCAST_DETAILS}?id=${activeItem?.id}&country=US&media=podcast&entity=podcastEpisode`
                 const epiUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(epiString)}`
@@ -67,7 +69,9 @@ const Podcast = () => {
 
                         }))
                 }
+                setInfo(info)
                 setEpiInfo(episodesInfo)
+                setLoading(false)
                 await podcastsCache.setItem('episodes', JSON.stringify({ [activeItem?.id] : episodesInfo})) 
                 
                 
@@ -81,15 +85,14 @@ const Podcast = () => {
     return activeItem?.id ? <div className="wrapper">
         {/* <h2>{ activeItem?.id}</h2> */}
         <section className="podcast-info">
-            {
-                info && <PodcastSummary activeItem={activeItem} />
+           <PodcastSummary activeItem={activeItem} />
                     
-            }
+            
 
         </section>
             {epiInfo && <Outlet context={{ details: epiInfo }} />}
 
-    </div> : <span>Loading</span>
+    </div> : <></>
 }
 
 export default Podcast

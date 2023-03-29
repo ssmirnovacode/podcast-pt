@@ -8,10 +8,13 @@ import { ActiveItemContext } from './context/ActiveItemContext';
 import { podcastsCache } from './utils/cacheRef';
 import PodcastSummary from './components/PodcastSummary';
 import PodcastDetails from './components/PodcastDetails';
+import { LoadingContext } from './context/LoadingContext';
+import Spinner from './components/Spinner';
 
 const App = () => {
 
     const [ activeItem, setActiveItem ] = useState({});
+    const [ loading, setLoading ] = useState(false);
 
     useEffect(() => {
         (async () => {
@@ -21,9 +24,14 @@ const App = () => {
     }, [])
     
     return (
+        <LoadingContext.Provider value={[ loading, setLoading ]}>
             <ActiveItemContext.Provider value={[ activeItem, setActiveItem ]}>
             <div className='app'>
-                <h1 className='header'><Link to="/">Podcaster</Link></h1>
+                <div className='header-wrapper'>
+                    <h1 className='header'><Link to="/">Podcaster</Link></h1>
+                { loading && <Spinner />}
+                </div>
+                
                 <Routes>
                     <Route path={'/'} index element={<Main bla='bla' />}/>  
                     <Route path={'/podcast/'} element={<Podcast />}>
@@ -39,6 +47,7 @@ const App = () => {
                 </Routes> 
             </div>
             </ActiveItemContext.Provider>
+        </LoadingContext.Provider>
           
         )
 }
