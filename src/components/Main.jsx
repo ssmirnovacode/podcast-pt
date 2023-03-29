@@ -1,15 +1,19 @@
 import { useContext, useEffect, useState } from "react";
+import { LoadingContext } from "../context/LoadingContext";
 import { podcastsCache } from "../utils/cacheRef";
 import { URL_TOP_100 } from "../utils/constants";
 import './Main.css'
 import PodcastCard from "./PodcastCard.jsx";
 
 const Main = props => {
+    const [ loading, setLoading ] = useContext(LoadingContext)
+
     const [ podcasts, setPodcasts ] = useState([]);
     const [ term, setTerm ] = useState('')
 
     useEffect(() => {
         (async () => {
+            setLoading(true)
             const timeStamp = await podcastsCache.getItem('timeStamp');
             if ((Date.now() - timeStamp) > 86400000) { // 86400000 milliseconds in a day
                 await podcastsCache.removeItem('podcasts');
@@ -20,9 +24,11 @@ const Main = props => {
             const podcasts = await podcastsCache.getItem('podcasts')
             if (podcasts?.length) {
                 setPodcasts(podcasts); 
+                setLoading(false)
                 return
             }
             try {
+                
                 const res = await fetch(URL_TOP_100);
                 const data = await res.json();
                 //console.log(data?.feed?.entry[0])
@@ -34,10 +40,13 @@ const Main = props => {
                     description: item.summary?.label
                 }))
                 setPodcasts(items)
+                setLoading(false)
                 await podcastsCache.setItem('podcasts', items)
                 
                 await podcastsCache.setItem('timeStamp', Date.now())
+                
             } catch (error) {
+                setLoading(false)
                 console.error(error)
             }
         })()

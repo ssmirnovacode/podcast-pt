@@ -21,7 +21,7 @@
 }
 
 .podcast-info .podcast-info__summary h3 {
-    text-align: center;
+    text-align: left;
     margin-bottom: 0;
     font-size: 1rem;
 }
@@ -36,4 +36,9 @@
     
     font-style: italic;
     font-size: .7rem;
+}
+
+.podcast-info .podcast-info__summary p:first-child {
+    font-weight: bold;
+    font-style: normal;
 }

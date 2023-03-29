@@ -1,7 +1,7 @@
 :root {
   --accent-color: rgb(69, 120, 167);
-  --border-color: grey;
-  --box-shadow: 2px 3px 2px;
+  --border-color: rgb(177, 175, 175);
+  --box-shadow: 2px 3px 2px var(--border-color);
   --border-radius: 3px;
   --card-width: 150px;
   --card-height: 200px
