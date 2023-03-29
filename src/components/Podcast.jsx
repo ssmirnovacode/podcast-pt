@@ -17,7 +17,6 @@ const Podcast = () => {
 
     useEffect(() => {
         (async () => {
-            console.log('useEff')
             if (!activeItem) return;
             setLoading(true)
             const data = await podcastsCache.getItem('details');
@@ -26,7 +25,6 @@ const Podcast = () => {
                 setInfo(data[activeItem?.id])
                 if (epiData && epiData[activeItem?.id]) {
                     setEpiInfo(epiData[activeItem?.id])
-                    //console.log('epi', epiData[activeItem?.id].episodes[0])
                     setLoading(false)
                     return
                 }
@@ -40,7 +38,6 @@ const Podcast = () => {
                 const result = await fetch(fetchUrl);
                 const data = await result.json();
                 const parsed = JSON.parse(data.contents.replace(/\\n/g));
-                //console.log('parsed', parsed)
 
                 const info = {
                     artistName: parsed?.results[0]?.artistName,
@@ -55,7 +52,6 @@ const Podcast = () => {
                 const epiRes = await fetch(epiUrl);
                 const epiData = await epiRes.json();
                 const parsedEpiData = JSON.parse(epiData.contents.replace(/\\n/g));
-                console.log('epi', parsedEpiData?.results[1])
                 const episodesInfo = {
                     count: parsedEpiData?.resultCount,
                     episodes: parsedEpiData?.results?.filter(item => item.wrapperType === 'podcastEpisode')
@@ -83,14 +79,10 @@ const Podcast = () => {
     }, [activeItem])
 
     return activeItem?.id ? <div className="wrapper">
-        {/* <h2>{ activeItem?.id}</h2> */}
         <section className="podcast-info">
            <PodcastSummary activeItem={activeItem} />
-                    
-            
-
         </section>
-            {epiInfo && <Outlet context={{ details: epiInfo }} />}
+        {epiInfo && <Outlet context={{ details: epiInfo }} />}
 
     </div> : <></>
 }
