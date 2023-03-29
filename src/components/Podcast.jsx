@@ -17,22 +17,20 @@ const Podcast = () => {
 
     useEffect(() => {
         (async () => {
-            if (!activeItem) return;
+            if (!activeItem?.id) return;
             setLoading(true)
             const data = await podcastsCache.getItem('details');
             const epiData = await podcastsCache.getItem('episodes');
-            if (data && data[activeItem?.id] ) { // 
-                setInfo(data[activeItem?.id])
-                if (epiData && epiData[activeItem?.id]) {
-                    setEpiInfo(epiData[activeItem?.id])
+          
+            if (data && JSON.parse(data)[activeItem?.id] && epiData && JSON.parse(epiData)[activeItem?.id]) {
+                setInfo(JSON.parse(data)[activeItem?.id])
+                setEpiInfo(JSON.parse(epiData)[activeItem?.id])
                     setLoading(false)
                     return
-                }
-                return
-                
             }
             try {
                 setLoading(true)
+                
                 const stringToEncode = `${URL_PODCAST_DETAILS}?id=${activeItem?.id}`
                 const fetchUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(stringToEncode)}`
                 const result = await fetch(fetchUrl);
@@ -45,8 +43,9 @@ const Podcast = () => {
                     releaseDate: parsed?.results[0]?.releaseDate,
                     trackTimeMillis: parsed?.results[0]?.trackTimeMillis
                 }
-                
-                await podcastsCache.setItem('details', JSON.stringify({ [activeItem?.id] : info}))
+                const prevData = await podcastsCache.getItem('details');
+                await podcastsCache.setItem('details', JSON.stringify({ ...JSON.parse(prevData), [activeItem?.id] : info}))
+               
                 const epiString = `${URL_PODCAST_DETAILS}?id=${activeItem?.id}&country=US&media=podcast&entity=podcastEpisode`
                 const epiUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(epiString)}`
                 const epiRes = await fetch(epiUrl);
@@ -67,14 +66,17 @@ const Podcast = () => {
                 }
                 setInfo(info)
                 setEpiInfo(episodesInfo)
+                
                 setLoading(false)
-                await podcastsCache.setItem('episodes', JSON.stringify({ [activeItem?.id] : episodesInfo})) 
+                const prevEpiData = await podcastsCache.getItem('episodes');
+                await podcastsCache.setItem('episodes', JSON.stringify({ ...JSON.parse(prevEpiData), [activeItem?.id] : episodesInfo})) 
                 
                 
             } catch (error) {
+                setLoading(false)
                 console.error(error)
             }
-
+            return () => setLoading(false)
          })()
     }, [activeItem])
 
