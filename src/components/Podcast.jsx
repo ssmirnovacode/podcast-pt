@@ -25,6 +25,7 @@ const Podcast = () => {
                 setInfo(data[activeItem?.id])
                 if (epiData && epiData[activeItem?.id]) {
                     setEpiInfo(epiData[activeItem?.id])
+                    //console.log('epi', epiData[activeItem?.id].episodes[0])
                     return
                 }
                 return
@@ -37,7 +38,7 @@ const Podcast = () => {
                 const result = await fetch(fetchUrl);
                 const data = await result.json();
                 const parsed = JSON.parse(data.contents.replace(/\\n/g));
-                console.log('parsed', parsed)
+                //console.log('parsed', parsed)
 
                 const info = {
                     artistName: parsed?.results[0]?.artistName,
@@ -52,14 +53,16 @@ const Podcast = () => {
                 const epiRes = await fetch(epiUrl);
                 const epiData = await epiRes.json();
                 const parsedEpiData = JSON.parse(epiData.contents.replace(/\\n/g));
+                console.log('epi', parsedEpiData?.results[1])
                 const episodesInfo = {
                     count: parsedEpiData?.resultCount,
                     episodes: parsedEpiData?.results?.filter(item => item.wrapperType === 'podcastEpisode')
-                        .map(({ releaseDate, trackId, trackTimeMillis, trackName}) => ({
+                        .map(({ releaseDate, trackId, trackTimeMillis, trackName, description=''}) => ({
                             id: trackId,
                             date: releaseDate.slice(0,10).split('-').reverse().join('/'),
                             duration: trackTimeMillis,
-                            title: trackName
+                            title: trackName,
+                            description
 
                         }))
                 }

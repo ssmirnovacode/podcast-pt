@@ -29,7 +29,12 @@ const App = () => {
                     <Route path={'/podcast/'} element={<Podcast />}>
                         <Route index element={<PodcastSummary item={activeItem}/>} />
                         <Route path={':podcastId'} element={<PodcastDetails />}/>
-                        <Route path={'episode/:episodeId'} element={<Episode/>}/>
+                        <Route path={':podcastId/episode/:episodeId'} element={<Episode/>}/>
+                        {/* <Route path={':podcastId'} element={<PodcastDetails />}>
+                            <Route index element={<PodcastDetails />} />
+                            <Route path={'episode/:episodeId'} element={<Episode/>}/>
+                        </Route> */}
+                        
                     </Route>
                 </Routes> 
             </div>
