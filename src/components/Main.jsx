@@ -5,15 +5,21 @@ import './Main.css'
 import PodcastCard from "./PodcastCard.jsx";
 
 const Main = props => {
-
     const [ podcasts, setPodcasts ] = useState([]);
     const [ term, setTerm ] = useState('')
 
     useEffect(() => {
         (async () => {
+            const timeStamp = await podcastsCache.getItem('timeStamp');
+            if ((Date.now() - timeStamp) > 86400000) { // 86400000 milliseconds in a day
+                await podcastsCache.removeItem('podcasts');
+                await podcastsCache.removeItem('details');
+                await podcastsCache.removeItem('episodes');
+                await podcastsCache.setItem('timeStamp', Date.now())
+            }
             const podcasts = await podcastsCache.getItem('podcasts')
             if (podcasts?.length) {
-                setPodcasts(podcasts); //
+                setPodcasts(podcasts); 
                 return
             }
             try {
@@ -29,6 +35,8 @@ const Main = props => {
                 }))
                 setPodcasts(items)
                 await podcastsCache.setItem('podcasts', items)
+                
+                await podcastsCache.setItem('timeStamp', Date.now())
             } catch (error) {
                 console.error(error)
             }
