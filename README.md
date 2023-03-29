@@ -1,4 +1,3 @@
-# react-custom-boilerplate
-Custom built React boilerplate
+# Podcaster
 
-Full manual: https://jsramblings.com/creating-a-react-app-with-webpack/
+yarn start (running at localhost:3000)
